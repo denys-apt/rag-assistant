@@ -1,4 +1,4 @@
-package com.denys.ollama_integration.db;
+package com.denys.rag_assistant.service.data;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.document.Document;

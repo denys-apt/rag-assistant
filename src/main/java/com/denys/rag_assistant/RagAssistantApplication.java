@@ -1,13 +1,13 @@
-package com.denys.ollama_integration;
+package com.denys.rag_assistant;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class OllamaIntegrationApplication {
+public class RagAssistantApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OllamaIntegrationApplication.class, args);
+		SpringApplication.run(RagAssistantApplication.class, args);
 	}
 
 }

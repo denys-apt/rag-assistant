@@ -1,6 +1,6 @@
-package com.denys.ollama_integration.llm.rag;
+package com.denys.rag_assistant.ai;
 
-import com.denys.ollama_integration.db.VectorStoreService;
+import com.denys.rag_assistant.service.data.VectorStoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.document.Document;
@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DataLakeIngestionService {
+public class KnowledgeBaseIngestionService {
 
     private final VectorStoreService vectorStoreService;
     private final List<String> ingestedChunkIds = new ArrayList<>();
@@ -61,9 +61,10 @@ public class DataLakeIngestionService {
                     .forEach(file -> {
                         try {
                             String content = Files.readString(file);
-                            String fileName = dataLakeDir.relativize(file).toString();
-                            documents.add(new Document(content, Map.of("source", fileName)));
-                            log.info("Loaded file: {}", fileName);
+                            String relativePath = dataLakeDir.relativize(file).toString().replace('\\', '/');
+                            String role = resolveRole(relativePath);
+                            documents.add(new Document(content, Map.of("source", relativePath, "role", role)));
+                            log.info("Loaded file: {} (role={})", relativePath, role);
                         } catch (IOException e) {
                             log.error("Failed to read file: {}", file, e);
                         }
@@ -91,5 +92,10 @@ public class DataLakeIngestionService {
         vectorStoreService.addChunks(chunks);
         ingestedChunkIds.addAll(chunks.stream().map(Document::getId).toList());
         log.info("Ingested {} chunks into vector store", chunks.size());
+    }
+
+    private String resolveRole(String relativePath) {
+        String topFolder = relativePath.contains("/") ? relativePath.substring(0, relativePath.indexOf('/')) : "";
+        return topFolder.equalsIgnoreCase("admin") ? "ADMIN" : "USER";
     }
 }

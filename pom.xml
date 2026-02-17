@@ -10,9 +10,9 @@
 	</parent>
 
 	<groupId>com.denys</groupId>
-	<artifactId>ollama-integration</artifactId>
+	<artifactId>rag-assistant</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ollama-integration</name>
+	<name>rag-assistant</name>
 
 	<properties>
 		<java.version>25</java.version>
@@ -38,7 +38,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jdbc</artifactId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
