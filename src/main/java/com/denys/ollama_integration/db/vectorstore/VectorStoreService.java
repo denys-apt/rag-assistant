@@ -1,4 +1,4 @@
-package com.denys.ollama_integration.db.qdrant;
+package com.denys.ollama_integration.db.vectorstore;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.document.Document;
@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class QdrantService {
+public class VectorStoreService {
 
     private final VectorStore vectorStore;
 

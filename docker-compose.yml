@@ -21,18 +21,8 @@ services:
       sh -c "sleep 5 && ollama pull gemma2:9b && ollama pull nomic-embed-text"
     restart: "no"
 
-  qdrant:
-    image: qdrant/qdrant
-    container_name: qdrant
-    restart: unless-stopped
-    ports:
-      - "6333:6333"
-      - "6334:6334"
-    volumes:
-      - qdrant_data:/qdrant/storage
-
   postgres:
-    image: postgres:16
+    image: pgvector/pgvector:pg16
     container_name: postgres
     restart: unless-stopped
     ports:
@@ -46,5 +36,4 @@ services:
 
 volumes:
   ollama_data:
-  qdrant_data:
   postgres_data:

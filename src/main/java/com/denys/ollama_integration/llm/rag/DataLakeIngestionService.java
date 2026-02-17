@@ -1,6 +1,6 @@
 package com.denys.ollama_integration.llm.rag;
 
-import com.denys.ollama_integration.db.qdrant.QdrantService;
+import com.denys.ollama_integration.db.vectorstore.VectorStoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.document.Document;
@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class DataLakeIngestionService {
 
-    private final QdrantService qdrantService;
+    private final VectorStoreService vectorStoreService;
     private final List<String> ingestedChunkIds = new ArrayList<>();
 
     @Value("${app.data-lake.path}")
@@ -37,14 +37,14 @@ public class DataLakeIngestionService {
     @PreDestroy
     public void onDestroy() {
         if (!clearOnShutdown) {
-            log.info("Skipping Qdrant cleanup on shutdown (clear-on-shutdown=false)");
+            log.info("Skipping vector store cleanup on shutdown (clear-on-shutdown=false)");
             return;
         }
         if (ingestedChunkIds.isEmpty()) {
             return;
         }
-        log.info("Clearing {} ingested chunks from Qdrant", ingestedChunkIds.size());
-        qdrantService.deleteByIds(ingestedChunkIds);
+        log.info("Clearing {} ingested chunks from vector store", ingestedChunkIds.size());
+        vectorStoreService.deleteByIds(ingestedChunkIds);
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -88,8 +88,8 @@ public class DataLakeIngestionService {
         List<Document> chunks = textSplitter.apply(documents);
         log.info("Split {} documents into {} chunks", documents.size(), chunks.size());
 
-        qdrantService.addChunks(chunks);
+        vectorStoreService.addChunks(chunks);
         ingestedChunkIds.addAll(chunks.stream().map(Document::getId).toList());
-        log.info("Ingested {} chunks into Qdrant", chunks.size());
+        log.info("Ingested {} chunks into vector store", chunks.size());
     }
 }
