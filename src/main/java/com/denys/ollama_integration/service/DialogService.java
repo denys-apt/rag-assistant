@@ -10,7 +10,7 @@ public class DialogService {
 
     private final LlmClient llmClient;
 
-    public String ask(String question) {
+    public String ask(String question, String dialogId) {
         return llmClient.ask(question);
     }
 }

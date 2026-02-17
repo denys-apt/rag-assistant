@@ -15,8 +15,8 @@ public class DialogController {
     private final DataLakeIngestionService ingestionService;
 
     @GetMapping("/ask")
-    public String ask(@RequestParam String question, @RequestParam String chatId) {
-        return dialogService.ask(question);
+    public String ask(@RequestParam String question, @RequestParam String dialogId) {
+        return dialogService.ask(question, dialogId);
     }
 
 }
