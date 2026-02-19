@@ -24,7 +24,7 @@ public class DialogFacade {
         var question = questionRequest.question();
 
 
-        ChatService.AskResult result = chatService.ask(question, userRole);
+        ChatService.AskResult result = chatService.ask(question, userRole, questionRequest.dialogId());
         var messageEntity = dialogService.saveMessage(dialog, question, result.answer(), result.contextChunkIds());
 
         return messageEntity.getAnswer();
@@ -35,7 +35,7 @@ public class DialogFacade {
         Role userRole = dialog.getUser().getRole();
         var question = questionRequest.question();
 
-        ChatService.StreamAskResult result = chatService.askStreaming(question, userRole);
+        ChatService.StreamAskResult result = chatService.askStreaming(question, userRole, questionRequest.dialogId());
 
         var emitter = new SseEmitter(0L);
         var fullAnswer = new StringBuilder();

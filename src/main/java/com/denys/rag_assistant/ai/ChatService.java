@@ -3,6 +3,7 @@ package com.denys.rag_assistant.ai;
 import com.denys.rag_assistant.persistence.entity.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.SearchRequest;
@@ -27,9 +28,6 @@ public class ChatService {
             Context:
             {context}
 
-            Conversation history:
-            {history}
-
             User question:
             {query}
             """;
@@ -37,7 +35,7 @@ public class ChatService {
     private final ChatClient chatClient;
     private final VectorStore vectorStore;
 
-    public AskResult ask(String question, Role userRole) {
+    public AskResult ask(String question, Role userRole, UUID dialogId) {
         List<Document> relevantDocs = searchDocuments(question, userRole);
 
         String context = relevantDocs.stream()
@@ -49,6 +47,7 @@ public class ChatService {
                 .toList();
 
         ChatResponse response = chatClient.prompt()
+                .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, dialogId.toString()))
                 .user(u -> u
                         .text(PROMPT_TEMPLATE)
                         .param("context", context)
@@ -76,7 +75,7 @@ public class ChatService {
         return vectorStore.similaritySearch(searchRequestBuilder.build());
     }
 
-    public StreamAskResult askStreaming(String question, Role userRole) {
+    public StreamAskResult askStreaming(String question, Role userRole, UUID dialogId) {
         List<Document> relevantDocs = searchDocuments(question, userRole);
 
         String context = relevantDocs.stream()
@@ -88,6 +87,7 @@ public class ChatService {
                 .toList();
 
         Flux<String> contentStream = chatClient.prompt()
+                .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, dialogId.toString()))
                 .user(u -> u
                         .text(PROMPT_TEMPLATE)
                         .param("context", context)
