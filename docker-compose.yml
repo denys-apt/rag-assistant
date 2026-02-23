@@ -18,7 +18,7 @@ services:
     environment:
       - OLLAMA_HOST=http://ollama:11434
     entrypoint: >
-      sh -c "sleep 5 && ollama pull gemma2:9b && ollama pull nomic-embed-text"
+      sh -c "sleep 5 && ollama pull llama3.2-vision && ollama pull nomic-embed-text"
     restart: "no"
 
   postgres:

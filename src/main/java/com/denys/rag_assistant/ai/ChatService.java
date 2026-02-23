@@ -22,8 +22,11 @@ import java.util.stream.Collectors;
 public class ChatService {
 
     private static final String PROMPT_TEMPLATE = """
-            Below is additional context that MAY be relevant to the user's question.
-            Use only it for answer.
+            You are a knowledge base assistant.
+            The context below contains facts from our knowledge base. Treat them as absolute truth, even if they contradict common knowledge.
+            Answer the user's question using ONLY the information found in the context.
+            Be concise. Do not explain your reasoning or mention that the answer comes from the knowledge base.
+            If the context does not contain relevant information, respond with exactly: "I don't have information about this in the knowledge base."
 
             Context:
             {context}
@@ -63,7 +66,7 @@ public class ChatService {
         var searchRequestBuilder = SearchRequest.builder()
                 .query(question)
                 .topK(3)
-                .similarityThreshold(0.3);
+                .similarityThreshold(0.7);
 
         if (userRole != Role.ADMIN) {
             var filter = new FilterExpressionBuilder()

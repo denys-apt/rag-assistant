@@ -9,7 +9,11 @@
       "WebFetch(domain:raw.githubusercontent.com)",
       "WebFetch(domain:www.baeldung.com)",
       "WebFetch(domain:mohankumarsagadevan.medium.com)",
-      "WebFetch(domain:howtodoinjava.com)"
+      "WebFetch(domain:howtodoinjava.com)",
+      "Bash(powershell -Command \"Add-Type -AssemblyName System.IO.Compression.FileSystem; $zip = [System.IO.Compression.ZipFile]::OpenRead\\(''$env:USERPROFILE\\\\.m2\\\\repository\\\\org\\\\springframework\\\\ai\\\\spring-ai-ollama\\\\2.0.0-M2\\\\spring-ai-ollama-2.0.0-M2.jar''\\); $zip.Entries | Where-Object { $_.Name -like ''*Options*'' } | Select-Object FullName\")",
+      "Bash(JAR=\"$USERPROFILE/.m2/repository/org/springframework/ai/spring-ai-ollama/2.0.0-M2/spring-ai-ollama-2.0.0-M2.jar\" unzip -l \"$JAR\")",
+      "Bash(xargs -I{} sh -c 'unzip -l \"\"{}\"\" 2>/dev/null | grep -i \"\"options\"\" | sed \"\"s|^|{}: |\"\"')",
+      "Bash(unzip:*)"
     ]
   }
 }
